@@ -29,7 +29,12 @@ export default function KringloopFinder() {
           setStatus("done");
         } catch (err) {
           setStatus("error");
-          setError(err instanceof Error ? err.message : "Onbekende fout bij het zoeken.");
+          const message = err instanceof Error ? err.message : "";
+          setError(
+            message && message !== "Failed to fetch"
+              ? message
+              : "Kon geen verbinding maken met de kaartendienst. Controleer je internetverbinding en probeer het opnieuw.",
+          );
         }
       },
       () => {
