@@ -1,0 +1,187 @@
+:root {
+  color-scheme: light;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f4f6f2;
+  color: #1f2a1e;
+}
+
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.app-header h1 {
+  margin-bottom: 0.25rem;
+}
+
+.app-header p {
+  margin-top: 0;
+  color: #4b5a45;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.tab {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #2f6b3c;
+  background: white;
+  color: #2f6b3c;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tab.active {
+  background: #2f6b3c;
+  color: white;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.primary-button {
+  padding: 0.85rem 1rem;
+  background: #2f6b3c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-text {
+  color: #b3261e;
+}
+
+.place-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.place-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.place-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.place-card-header h3 {
+  margin: 0;
+}
+
+.distance {
+  color: #4b5a45;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.address {
+  margin: 0.25rem 0;
+  color: #4b5a45;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+.badge-open {
+  background: #dff5e1;
+  color: #1e7a2e;
+}
+
+.badge-closed {
+  background: #fde4e1;
+  color: #b3261e;
+}
+
+.badge-unknown {
+  background: #eee;
+  color: #555;
+}
+
+.place-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.place-links a {
+  color: #2f6b3c;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.file-input {
+  display: inline-block;
+  padding: 0.75rem 1rem;
+  border: 1px dashed #2f6b3c;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #2f6b3c;
+  font-weight: 600;
+}
+
+.file-input input {
+  display: none;
+}
+
+.preview img {
+  max-width: 100%;
+  border-radius: 10px;
+}
+
+.valuation-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.valuation-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2f6b3c;
+}
+
+.disclaimer {
+  font-size: 0.85rem;
+  color: #6b6b6b;
+}
