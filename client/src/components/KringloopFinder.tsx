@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import { findNearbyKringloopwinkels, type KringloopPlace } from "../lib/overpass";
+import { describeFetchError } from "../lib/errors";
 import OpeningHoursBadge from "./OpeningHoursBadge";
 
 type Status = "idle" | "locating" | "loading" | "done" | "error";
@@ -29,11 +30,12 @@ export default function KringloopFinder() {
           setStatus("done");
         } catch (err) {
           setStatus("error");
-          const message = err instanceof Error ? err.message : "";
           setError(
-            message && message !== "Failed to fetch"
-              ? message
-              : "Kon geen verbinding maken met de kaartendienst. Controleer je internetverbinding en probeer het opnieuw.",
+            describeFetchError(err, {
+              network:
+                "Kon geen verbinding maken met de kaartendienst. Controleer je internetverbinding en probeer het opnieuw.",
+              unknown: "Onbekende fout bij het zoeken.",
+            }),
           );
         }
       },

@@ -1,4 +1,5 @@
 import { useState, type ChangeEvent } from "react";
+import { describeFetchError } from "../lib/errors";
 
 interface ValuationResult {
   item: string;
@@ -52,7 +53,13 @@ export default function PhotoValuator() {
       setStatus("done");
     } catch (err) {
       setStatus("error");
-      setError(err instanceof Error ? err.message : "Onbekende fout bij het waarderen.");
+      setError(
+        describeFetchError(err, {
+          network:
+            "Kon geen verbinding maken met de server. Controleer je internetverbinding en probeer het opnieuw.",
+          unknown: "Onbekende fout bij het waarderen.",
+        }),
+      );
     }
   };
 
