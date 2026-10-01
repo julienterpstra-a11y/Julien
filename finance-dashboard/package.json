@@ -1,0 +1,13 @@
+{
+  "name": "finance-dashboard",
+  "version": "1.0.0",
+  "description": "Zelf-gehoste financiële dashboard met PSD2-bankkoppeling (Enable Banking / GoCardless), CSV-import en demo-modus",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test"
+  }
+}

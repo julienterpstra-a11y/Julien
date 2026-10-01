@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mijn Financiën</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <!-- Login -->
+  <section id="login" class="login" hidden>
+    <form id="login-form" class="card login-card">
+      <h1>Mijn Financiën</h1>
+      <label>Wachtwoord <input type="password" name="password" autocomplete="current-password" required autofocus></label>
+      <button class="btn primary" type="submit">Inloggen</button>
+      <p class="error" id="login-error" role="alert"></p>
+    </form>
+  </section>
+
+  <div id="app" hidden>
+    <header class="topbar">
+      <div class="brand">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V9m5 10V5m5 14v-7m5 7V8" /></svg>
+        <h1>Mijn Financiën</h1>
+      </div>
+      <div class="controls">
+        <div class="segmented" id="period" role="group" aria-label="Periode">
+          <button data-period="month">Deze maand</button>
+          <button data-period="prev">Vorige maand</button>
+          <button data-period="3">3 mnd</button>
+          <button data-period="12" class="active">12 mnd</button>
+          <button data-period="ytd">Dit jaar</button>
+          <button data-period="all">Alles</button>
+        </div>
+        <select id="account-filter" aria-label="Rekening"></select>
+        <button class="btn" id="sync-btn" title="Haal nieuwe transacties op bij je bank">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.9-3M4 5v3h3m13 8v-3h-3M4 13a8 8 0 0 0 14.9 3"/></svg>
+          <span>Synchroniseren</span>
+        </button>
+        <button class="btn primary" id="manage-btn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10h18M5 10v8m4-8v8m6-8v8m4-8v8M3 21h18M12 3l9 5H3z"/></svg>
+          <span>Banken &amp; instellingen</span>
+        </button>
+      </div>
+    </header>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <main>
+      <!-- Lege staat -->
+      <section id="empty" class="card empty" hidden>
+        <h2>Welkom! Koppel je eerste rekening</h2>
+        <p>Je gegevens blijven op je eigen computer. Kies hoe je wilt beginnen:</p>
+        <div class="empty-options">
+          <button class="option" data-open="connect">
+            <strong>Bank koppelen</strong>
+            <span>Veilig via PSD2 (Enable Banking of GoCardless). Je logt in bij je eigen bank.</span>
+          </button>
+          <button class="option" data-open="import">
+            <strong>CSV importeren</strong>
+            <span>Exporteer transacties uit ING, Rabobank, ABN AMRO, bunq, SNS, ASN…</span>
+          </button>
+          <button class="option" id="demo-btn">
+            <strong>Probeer met demodata</strong>
+            <span>12 maanden fictieve transacties om de dashboard te verkennen.</span>
+          </button>
+        </div>
+      </section>
+
+      <div id="dashboard" hidden>
+        <section class="kpis" id="kpis"></section>
+
+        <section class="grid-2">
+          <article class="card">
+            <header class="card-head">
+              <h2>Inkomsten en uitgaven per maand</h2>
+              <div class="legend" id="flow-legend"></div>
+            </header>
+            <div class="chart" id="flow-chart"></div>
+          </article>
+          <article class="card">
+            <header class="card-head">
+              <h2>Verloop totaal saldo</h2>
+            </header>
+            <div class="chart" id="balance-chart"></div>
+          </article>
+        </section>
+
+        <section class="grid-2">
+          <article class="card">
+            <header class="card-head">
+              <h2>Uitgaven per categorie</h2>
+              <span class="muted small" id="cat-hint">Klik op een categorie om te filteren</span>
+            </header>
+            <div id="categories" class="categories"></div>
+          </article>
+          <article class="card">
+            <header class="card-head">
+              <h2>Grootste vaste lasten</h2>
+              <span class="muted small">Terugkerende afschrijvingen, gemiddeld per maand</span>
+            </header>
+            <div id="recurring" class="recurring"></div>
+          </article>
+        </section>
+
+        <section class="card">
+          <header class="card-head wrap">
+            <h2>Transacties <span class="muted small" id="tx-count"></span></h2>
+            <div class="tx-tools">
+              <input type="search" id="tx-search" placeholder="Zoek op naam, omschrijving of bedrag…" aria-label="Zoeken">
+              <select id="tx-category" aria-label="Categorie"></select>
+              <label class="check small"><input type="checkbox" id="learn" checked> Categorie onthouden voor tegenpartij</label>
+            </div>
+          </header>
+          <div class="table-wrap">
+            <table class="tx">
+              <thead><tr><th>Datum</th><th>Tegenpartij / omschrijving</th><th>Categorie</th><th class="num">Bedrag</th></tr></thead>
+              <tbody id="tx-body"></tbody>
+            </table>
+          </div>
+          <button class="btn ghost" id="tx-more" hidden>Meer tonen</button>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- Beheer -->
+  <dialog id="manage" class="drawer">
+    <form method="dialog" class="drawer-head">
+      <h2>Banken &amp; instellingen</h2>
+      <button class="btn ghost icon" aria-label="Sluiten">✕</button>
+    </form>
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-tab="connect" class="active">Bank koppelen</button>
+      <button role="tab" data-tab="accounts">Rekeningen</button>
+      <button role="tab" data-tab="import">CSV importeren</button>
+      <button role="tab" data-tab="budgets">Budgetten</button>
+      <button role="tab" data-tab="rules">Regels</button>
+    </nav>
+
+    <section class="tab" data-panel="connect">
+      <p class="muted">Koppelen gaat via een onder EU-toezicht vergunde PSD2-dienst (AISP). Je logt in bij je eigen bank en geeft alleen <strong>leestoegang</strong> (max. 180 dagen). Deze app kan nooit betalingen doen.</p>
+      <div id="provider-warning" class="notice" hidden></div>
+      <div class="form-row">
+        <label>Dienst <select id="provider"></select></label>
+        <label>Land
+          <select id="country">
+            <option value="NL" selected>Nederland</option><option value="BE">België</option><option value="DE">Duitsland</option>
+            <option value="FR">Frankrijk</option><option value="ES">Spanje</option><option value="IT">Italië</option>
+            <option value="AT">Oostenrijk</option><option value="FI">Finland</option><option value="LU">Luxemburg</option>
+          </select>
+        </label>
+      </div>
+      <input type="search" id="bank-search" placeholder="Zoek je bank (ING, Rabobank, ABN AMRO, bunq…)" aria-label="Zoek bank">
+      <ul id="bank-list" class="bank-list"></ul>
+      <h3>Gekoppelde banken</h3>
+      <ul id="connections" class="list"></ul>
+    </section>
+
+    <section class="tab" data-panel="accounts" hidden>
+      <ul id="accounts" class="list"></ul>
+      <p class="muted small">Tip: voor CSV-rekeningen zonder saldo-kolom kun je hier het huidige saldo invullen, dan klopt het saldoverloop.</p>
+    </section>
+
+    <section class="tab" data-panel="import" hidden>
+      <p class="muted">Download je transacties als CSV bij je bank en sleep het bestand hierheen. Herkend: <strong>ING</strong> (CSV), <strong>Rabobank</strong> (CSV), <strong>ABN AMRO</strong> (TXT/TAB) en elk bestand met kolommen <em>Datum</em> en <em>Bedrag</em> (bunq, SNS, ASN, RegioBank, Triodos, Knab…). Dubbele transacties worden automatisch overgeslagen.</p>
+      <label>Rekeningnaam (optioneel) <input id="import-name" placeholder="Bijv. Gezamenlijke rekening"></label>
+      <label class="dropzone" id="dropzone">
+        <input type="file" id="import-file" accept=".csv,.txt,.tab" multiple hidden>
+        <strong>Sleep CSV-bestanden hierheen</strong><span>of klik om te kiezen</span>
+      </label>
+      <div id="import-result"></div>
+    </section>
+
+    <section class="tab" data-panel="budgets" hidden>
+      <p class="muted">Stel een maandbudget in per categorie. Het dashboard laat zien hoeveel je gemiddeld per maand uitgeeft ten opzichte van je budget.</p>
+      <form id="budget-form" class="budget-form"></form>
+    </section>
+
+    <section class="tab" data-panel="rules" hidden>
+      <p class="muted">Transacties worden automatisch gecategoriseerd met deze regels (van boven naar beneden, eerste match wint). Het patroon is een reguliere expressie op tegenpartij + omschrijving.</p>
+      <div id="rules" class="rules"></div>
+      <div class="row">
+        <button class="btn" id="rule-add" type="button">Regel toevoegen</button>
+        <button class="btn primary" id="rules-save" type="button">Opslaan en opnieuw categoriseren</button>
+      </div>
+      <h3>Gegevens</h3>
+      <div class="row">
+        <button class="btn" id="demo-btn-2" type="button">Demodata laden</button>
+        <button class="btn danger" id="reset-btn" type="button">Alle gegevens wissen</button>
+        <button class="btn ghost" id="logout-btn" type="button" hidden>Uitloggen</button>
+      </div>
+    </section>
+  </dialog>
+
+  <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+</body>
+</html>
