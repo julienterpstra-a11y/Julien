@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prijspiraat — elke dag verrassend voordelig</title>
+  <meta name="description" content="Prijspiraat: duizenden producten voor huishouden, wonen, hobby en meer, elke dag tegen de laagste prijs.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="topbar">
+    <span>✔ Gratis bezorging vanaf €20</span>
+    <span>✔ 30 dagen bedenktijd</span>
+    <span class="hide-sm">✔ Ophalen in de winkel binnen 2 uur</span>
+  </div>
+
+  <header class="header">
+    <div class="wrap header-inner">
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+      <a href="#" class="logo" id="logoLink" aria-label="Prijspiraat home">
+        <span class="logo-mark">P</span><span class="logo-text">Prijspiraat</span>
+      </a>
+      <form class="search" id="searchForm" role="search">
+        <input id="searchInput" type="search" placeholder="Waar ben je naar op zoek?" aria-label="Zoeken">
+        <button type="submit" aria-label="Zoek">🔍</button>
+      </form>
+      <nav class="header-actions">
+        <a href="#" class="action hide-sm" id="storesLink"><span>📍</span><small>Winkels</small></a>
+        <a href="#" class="action" id="favBtn"><span>♡</span><small>Favorieten</small><b class="badge" id="favCount" hidden>0</b></a>
+        <button class="action" id="cartBtn"><span>🛒</span><small>Winkelwagen</small><b class="badge" id="cartCount" hidden>0</b></button>
+      </nav>
+    </div>
+    <nav class="catnav" id="catnav">
+      <div class="wrap catnav-inner" id="catnavInner"></div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero wrap" id="hero">
+      <div class="hero-main">
+        <p class="eyebrow">Deze week</p>
+        <h1>Knalprijzen voor<br>je hele huis</h1>
+        <p>Nieuwe weekdeals, elke woensdag. Op = op!</p>
+        <a href="#deals" class="btn btn-primary">Bekijk de weekdeals</a>
+        <div class="hero-art" aria-hidden="true">🛋️🕯️🧺</div>
+      </div>
+      <div class="hero-side">
+        <a href="#" class="promo promo-a" data-cat="hobby"><b>Hobby-week</b><span>Alles voor je creatieve project</span><i>🎨</i></a>
+        <a href="#" class="promo promo-b" data-cat="tuin"><b>Klaar voor de tuin</b><span>Vanaf €1,69</span><i>🌱</i></a>
+      </div>
+    </section>
+
+    <section class="wrap usp-strip">
+      <div>💶 <b>Laagste prijs</b><span>Elke dag scherp geprijsd</span></div>
+      <div>🔄 <b>Nieuw assortiment</b><span>Elke week 150+ nieuwe items</span></div>
+      <div>🚚 <b>Snel geleverd</b><span>Voor 22:00 besteld, morgen in huis</span></div>
+      <div>🏪 <b>Gratis afhalen</b><span>In 2.000+ winkels</span></div>
+    </section>
+
+    <section class="wrap section" id="deals">
+      <div class="section-head">
+        <h2>🔥 Weekdeals</h2>
+        <span class="countdown" id="countdown"></span>
+      </div>
+      <div class="rail" id="dealRail"></div>
+    </section>
+
+    <section class="wrap section">
+      <div class="section-head"><h2>Shop per categorie</h2></div>
+      <div class="cat-grid" id="catGrid"></div>
+    </section>
+
+    <section class="wrap section" id="shop">
+      <div class="section-head">
+        <h2 id="shopTitle">Alle producten</h2>
+        <div class="tools">
+          <label class="chk"><input type="checkbox" id="dealOnly"> Alleen aanbiedingen</label>
+          <select id="sortSelect" aria-label="Sorteren">
+            <option value="pop">Populariteit</option>
+            <option value="low">Prijs laag – hoog</option>
+            <option value="high">Prijs hoog – laag</option>
+            <option value="rating">Beste beoordeling</option>
+          </select>
+        </div>
+      </div>
+      <p class="result-count" id="resultCount"></p>
+      <div class="grid" id="productGrid"></div>
+    </section>
+
+    <section class="wrap newsletter">
+      <div>
+        <h2>Mis geen enkele deal</h2>
+        <p>Ontvang elke woensdag de nieuwe weekdeals in je inbox.</p>
+      </div>
+      <form id="newsForm">
+        <input type="email" required placeholder="Je e-mailadres" aria-label="E-mailadres">
+        <button class="btn btn-primary">Aanmelden</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <div><span class="logo"><span class="logo-mark">P</span><span class="logo-text">Prijspiraat</span></span><p>Elke dag verrassend voordelig.</p></div>
+      <div><h4>Klantenservice</h4><a href="#">Contact</a><a href="#">Bezorgen</a><a href="#">Retourneren</a><a href="#">Veelgestelde vragen</a></div>
+      <div><h4>Over ons</h4><a href="#">Werken bij</a><a href="#">Duurzaamheid</a><a href="#">Winkels</a></div>
+      <div><h4>Betaalmethodes</h4><p class="pay">iDEAL · Bancontact · Visa · Mastercard · PayPal</p></div>
+    </div>
+    <p class="wrap legal">© <span id="year"></span> Prijspiraat — demo-webshop. Prijzen incl. btw.</p>
+  </footer>
+
+  <!-- Winkelwagen -->
+  <div class="overlay" id="overlay" hidden></div>
+  <aside class="drawer" id="cartDrawer" aria-label="Winkelwagen" aria-hidden="true">
+    <div class="drawer-head"><h3>Winkelwagen</h3><button class="icon-btn" data-close>✕</button></div>
+    <div class="drawer-body" id="cartItems"></div>
+    <div class="drawer-foot" id="cartFoot"></div>
+  </aside>
+
+  <!-- Mobiel menu -->
+  <aside class="drawer drawer-left" id="menuDrawer" aria-label="Menu" aria-hidden="true">
+    <div class="drawer-head"><h3>Categorieën</h3><button class="icon-btn" data-close>✕</button></div>
+    <div class="drawer-body" id="menuList"></div>
+  </aside>
+
+  <!-- Productdetail / checkout modal -->
+  <div class="modal" id="modal" hidden>
+    <div class="modal-box" role="dialog" aria-modal="true">
+      <button class="icon-btn modal-close" data-close>✕</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="products.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
